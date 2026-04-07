@@ -34,15 +34,15 @@ class _PantallaCargandoState extends State<PantallaCargando> {
 
   @override
   Widget build(BuildContext context) => const Scaffold(
-    backgroundColor: AppCSS.verdeClaro,
+    backgroundColor: AppCSS.bgLight,
     body: Center(
       child: SizedBox(
         width: 48,
         height: 48,
         child: CircularProgressIndicator(
           strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          backgroundColor: AppCSS.verdePrimario,
+          valueColor: AlwaysStoppedAnimation<Color>(AppCSS.white),
+          backgroundColor: AppCSS.primary,
         ),
       ),
     ),

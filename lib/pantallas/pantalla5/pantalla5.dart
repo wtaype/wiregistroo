@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../../wicss.dart';
 import '../../wii.dart';
+import '../../wicss.dart';
 import '../../widev.dart';
 import '../../wiauth/auth_fb.dart';
 import '../../wiauth/login.dart';
@@ -46,7 +46,7 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
         _controllerFoto.text = _usuario!.foto!;
       }
     } catch (e) {
-      if (mounted) MensajeHelper.mostrarError(context, 'Error: $e');
+      if (mounted) Notificacion.err(context, 'Error: $e');
     } finally {
       if (mounted) setState(() => _cargandoUsuario = false);
     }
@@ -127,30 +127,23 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text('Configuración', style: AppEstilos.textoBoton),
-      backgroundColor: AppCSS.verdePrimario,
-      foregroundColor: AppCSS.blanco,
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.refresh),
-          onPressed: _recargarUsuario,
-          tooltip: 'Recargar datos',
-        ),
-      ],
-    ),
-    backgroundColor: AppCSS.verdeClaro,
+    appBar: wiAppBar('Ajustes', actions: [
+      IconButton(
+        icon: const Icon(Icons.refresh),
+        onPressed: _recargarUsuario,
+        tooltip: 'Recargar datos',
+      ),
+    ]),
+    backgroundColor: AppCSS.bgLight,
     body: _cargandoUsuario
-        ? IndicadorCarga(mensaje: 'Cargando perfil...')
+        ? const Load(msg: 'Cargando perfil...')
         : _usuario == null
-        ? SinDatos(mensaje: 'Error cargando usuario', icono: Icons.error)
+        ? const Vacio(msg: 'Error cargando usuario', ico: Icons.error)
         : SingleChildScrollView(
-            padding: AppCSS.miwp,
+            padding: AppCSS.padM,
             child: Column(
               children: [
-                AppCSS.espacioMedioWidget,
+                AppCSS.gapM,
 
                 // 📷 Foto de perfil circular
                 _fotoPerfil(),
@@ -170,7 +163,7 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
                 // ℹ️ Solo versión y creado
                 _infoApp(),
 
-                AppCSS.espacioMedioWidget,
+                AppCSS.gapM,
               ],
             ),
           ),
@@ -183,12 +176,12 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
       height: 120,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppCSS.blanco,
+        color: AppCSS.white,
         boxShadow: [
           BoxShadow(
-            color: AppCSS.verdePrimario.withOpacity(0.3),
+            color: AppCSS.primary.withOpacity(0.3),
             blurRadius: 12,
-            offset: Offset(0, 6),
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -210,7 +203,7 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
   Widget _fotoDefault() => Container(
     width: 120,
     height: 120,
-    decoration: BoxDecoration(shape: BoxShape.circle, color: AppCSS.verdeSuave),
+    decoration: BoxDecoration(shape: BoxShape.circle, color: AppCSS.bgSoft),
     child: ClipOval(
       child: Image.asset(
         AppCSS.logoSmile,
@@ -218,18 +211,18 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
         height: 120,
         fit: BoxFit.cover,
         errorBuilder: (_, __, ___) =>
-            Icon(Icons.account_circle, size: 80, color: AppCSS.verdePrimario),
+            const Icon(Icons.account_circle, size: 80, color: AppCSS.primary),
       ),
     ),
   );
 
   // 👤 Usuario simple sin fondo - SÚPER LIMPIO
   Widget _usuarioSimple() => Padding(
-    padding: EdgeInsets.symmetric(vertical: AppCSS.espacioMedio),
+    padding: EdgeInsets.symmetric(vertical: AppCSS.sp16),
     child: Text(
       '@${_usuario?.usuario ?? 'Usuario'}',
-      style: AppEstilos.subtitulo.copyWith(
-        color: AppCSS.verdePrimario,
+      style: AppStyle.h3.copyWith(
+        color: AppCSS.primary,
         fontWeight: FontWeight.w700,
       ),
       textAlign: TextAlign.center,
@@ -237,19 +230,17 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
   );
 
   // 📋 Tarjeta de información personal - UNA SOLA TARJETA BLANCA
-  Widget _tarjetaInformacion() => TarjetaInformacion(
-    colorFondo: AppCSS.blanco,
-    elevacion: 3,
-    contenido: Column(
+  Widget _tarjetaInformacion() => Glass(
+    child: Column(
       children: [
         _itemInfo(
           'Nombres Completos',
           '${_usuario?.nombre ?? 'N/A'} ${_usuario?.apellidos ?? ''}',
           Icons.badge,
         ),
-        Divider(color: AppCSS.grisClaro, height: AppCSS.espacioGrande),
+        Divider(color: AppCSS.grayLight, height: AppCSS.sp24),
         _itemInfo('Email', _usuario?.email ?? 'N/A', Icons.email),
-        Divider(color: AppCSS.grisClaro, height: AppCSS.espacioGrande),
+        Divider(color: AppCSS.grayLight, height: AppCSS.sp24),
         _itemInfo('Grupo Unido', _usuario?.grupo ?? 'N/A', Icons.group),
       ],
     ),
@@ -262,27 +253,27 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-          color: AppCSS.verdeSuave,
+          color: AppCSS.bgSoft,
           shape: BoxShape.circle,
         ),
-        child: Icon(icono, color: AppCSS.verdePrimario, size: 22),
+        child: Icon(icono, color: AppCSS.primary, size: 22),
       ),
-      AppCSS.espacioMedioWidget,
+      AppCSS.gapM,
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               titulo,
-              style: AppEstilos.textoChico.copyWith(
-                color: AppCSS.gris,
+              style: AppStyle.bdS.copyWith(
+                color: AppCSS.gray,
                 fontWeight: FontWeight.w500,
               ),
             ),
             Text(
               valor,
-              style: AppEstilos.textoNormal.copyWith(
-                color: AppCSS.textoOscuro,
+              style: AppStyle.bd.copyWith(
+                color: AppCSS.text500,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -294,11 +285,9 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
   // 🖼️ Cambiar foto - PADDING MODERADO
   Widget _cambiarFoto() => Padding(
-    padding: EdgeInsets.symmetric(vertical: AppCSS.espacioMedio),
-    child: TarjetaInformacion(
-      colorFondo: AppCSS.blanco,
-      elevacion: 2,
-      contenido: Column(
+    padding: EdgeInsets.symmetric(vertical: AppCSS.sp16),
+    child: Glass(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -307,53 +296,53 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
                 width: 45,
                 height: 45,
                 decoration: BoxDecoration(
-                  color: AppCSS.verdeSuave,
+                  color: AppCSS.bgSoft,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.photo_camera,
-                  color: AppCSS.verdePrimario,
+                  color: AppCSS.primary,
                   size: 22,
                 ),
               ),
-              AppCSS.espacioMedioWidget,
+              AppCSS.gapM,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Foto de Perfil',
-                      style: AppEstilos.subtitulo.copyWith(
-                        color: AppCSS.textoOscuro,
+                      style: AppStyle.h3.copyWith(
+                        color: AppCSS.text500,
                       ),
                     ),
                     Text(
                       'Agrega el enlace de tu foto',
-                      style: AppEstilos.textoChico.copyWith(color: AppCSS.gris),
+                      style: AppStyle.bdS.copyWith(color: AppCSS.gray),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          AppCSS.espacioMedioWidget,
+          AppCSS.gapM,
 
-          CampoTexto(
-            etiqueta: 'URL de la imagen',
-            pista: 'https://ejemplo.com/mi-foto.jpg',
-            icono: Icons.link,
-            controlador: _controllerFoto,
-            tipoTeclado: TextInputType.url,
+          Campo(
+            lbl: 'URL de la imagen',
+            hint: 'https://ejemplo.com/mi-foto.jpg',
+            ico: Icons.link,
+            ctrl: _controllerFoto,
+            kb: TextInputType.url,
           ),
-          AppCSS.espacioMedioWidget,
+          AppCSS.gapM,
 
           SizedBox(
             width: double.infinity,
-            child: BotonPrincipal(
-              texto: _cargando ? 'Actualizando...' : 'Actualizar Foto',
-              icono: Icons.update,
-              estaCargando: _cargando,
-              alPresionar: _actualizarFoto,
+            child: Btn(
+              txt: _cargando ? 'Actualizando...' : 'Actualizar Foto',
+              ico: Icons.update,
+              load: _cargando,
+              onTap: _actualizarFoto,
             ),
           ),
         ],
@@ -363,19 +352,19 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
   // 🚪 Botón cerrar sesión - PADDING REDUCIDO
   Widget _botonCerrarSesion() => Padding(
-    padding: EdgeInsets.symmetric(vertical: AppCSS.espacioChico),
+    padding: EdgeInsets.symmetric(vertical: AppCSS.sp8),
     child: SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: _cerrarSesion,
-        icon: Icon(Icons.logout),
-        label: Text('Cerrar Sesión'),
+        icon: const Icon(Icons.logout),
+        label: const Text('Cerrar Sesión'),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppCSS.error,
-          foregroundColor: AppCSS.blanco,
-          padding: EdgeInsets.symmetric(vertical: AppCSS.espacioMedio),
+          foregroundColor: AppCSS.white,
+          padding: EdgeInsets.symmetric(vertical: AppCSS.sp16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppCSS.radioMedio),
+            borderRadius: BorderRadius.circular(AppCSS.rad12),
           ),
         ),
       ),
@@ -384,18 +373,18 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
   // ℹ️ Solo versión y creado - SIN ICONO NI NOMBRE DE APP
   Widget _infoApp() => Padding(
-    padding: EdgeInsets.symmetric(vertical: AppCSS.espacioMedio),
+    padding: EdgeInsets.symmetric(vertical: AppCSS.sp16),
     child: Column(
       children: [
         Text(
           'Versión ${wii.version}',
-          style: AppEstilos.textoChico.copyWith(color: AppCSS.gris),
+          style: AppStyle.bdS.copyWith(color: AppCSS.gray),
         ),
-        AppCSS.espacioChicoWidget,
+        AppCSS.gapS,
         Text(
-          AppCSS.creadoBy,
-          style: AppEstilos.textoChico.copyWith(
-            color: AppCSS.gris,
+          wii.by,
+          style: AppStyle.bdS.copyWith(
+            color: AppCSS.gray,
             fontStyle: FontStyle.italic,
           ),
         ),
@@ -423,10 +412,10 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
         _fechaCache = DateTime.now();
 
         setState(() => _usuario = usuario);
-        MensajeHelper.mostrarExito(context, 'Datos actualizados 🔄');
+        Notificacion.ok(context, 'Datos actualizados 🔄');
       }
     } catch (e) {
-      if (mounted) MensajeHelper.mostrarError(context, 'Error: $e');
+      if (mounted) Notificacion.err(context, 'Error: $e');
     } finally {
       if (mounted) setState(() => _cargandoUsuario = false);
     }
@@ -436,7 +425,7 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
   void _actualizarFoto() async {
     final url = _controllerFoto.text.trim();
     if (url.isEmpty) {
-      MensajeHelper.mostrarError(context, 'Ingresa un enlace válido');
+      Notificacion.err(context, 'Ingresa un enlace válido');
       return;
     }
 
@@ -468,10 +457,10 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
 
         setState(() => _usuario = usuarioActualizado);
         _controllerFoto.clear();
-        MensajeHelper.mostrarExito(context, '¡Foto actualizada! 📷');
+        Notificacion.ok(context, '¡Foto actualizada! 📷');
       }
     } catch (e) {
-      MensajeHelper.mostrarError(context, 'Error: $e');
+      Notificacion.err(context, 'Error: $e');
     } finally {
       if (mounted) setState(() => _cargando = false);
     }
@@ -482,31 +471,31 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Cerrar Sesión', style: AppEstilos.subtitulo),
+        title: Text('Cerrar Sesión', style: AppStyle.h3),
         content: Text(
           '¿Estás seguro que quieres cerrar sesión?',
-          style: AppEstilos.textoNormal,
+          style: AppStyle.bd,
         ),
-        backgroundColor: AppCSS.blanco,
+        backgroundColor: AppCSS.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppCSS.radioMedio),
+          borderRadius: BorderRadius.circular(AppCSS.rad12),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancelar', style: TextStyle(color: AppCSS.gris)),
+            child: Text('Cancelar', style: TextStyle(color: AppCSS.gray)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppCSS.error,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppCSS.radioChico),
+                borderRadius: BorderRadius.circular(AppCSS.rad8),
               ),
             ),
-            child: Text(
+            child: const Text(
               'Cerrar Sesión',
-              style: TextStyle(color: AppCSS.blanco),
+              style: TextStyle(color: AppCSS.white),
             ),
           ),
         ],
@@ -525,7 +514,7 @@ class _PantallaConfiguracionState extends State<PantallaConfiguracion> {
           );
         }
       } catch (e) {
-        if (mounted) MensajeHelper.mostrarError(context, 'Error: $e');
+        if (mounted) Notificacion.err(context, 'Error: $e');
       }
     }
   }

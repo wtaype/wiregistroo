@@ -314,3 +314,63 @@ class Campo extends StatelessWidget {
     ),
   );
 }
+
+// 🎯 WiAppBar — AppBar consistente _______
+AppBar wiAppBar(String title, {List<Widget>? actions}) => AppBar(
+  title: Text(title, style: AppStyle.btn),
+  backgroundColor: AppCSS.primary,
+  foregroundColor: AppCSS.white,
+  centerTitle: true,
+  automaticallyImplyLeading: false,
+  actions: actions,
+);
+
+// 💳 WiCard — Card con glass effect _______
+Widget wiCard({required Widget child, EdgeInsets? margin, EdgeInsets? padding}) => Container(
+  margin: margin ?? AppCSS.padM,
+  padding: padding ?? AppCSS.padL,
+  decoration: AppCSS.glass500,
+  child: child,
+);
+
+// ⭕ WiIconCircle — Icono circular _______
+Widget wiIconCircle(IconData icon, {Color? color, double size = 80}) => Container(
+  width: size, height: size,
+  decoration: BoxDecoration(
+    color: color ?? AppCSS.primary,
+    shape: BoxShape.circle,
+  ),
+  child: Icon(icon, size: size / 2, color: AppCSS.white),
+);
+
+// 🏠 WiScaffold — Scaffold base _______
+class WiScaffold extends StatelessWidget {
+  final String? title;
+  final Widget body;
+  final List<Widget>? actions;
+  const WiScaffold({super.key, this.title, required this.body, this.actions});
+
+  @override
+  Widget build(BuildContext ctx) => Scaffold(
+    appBar: title != null ? wiAppBar(title!, actions: actions) : null,
+    backgroundColor: AppCSS.bgLight,
+    body: body,
+  );
+}
+
+// 📄 WiPageHeader — Header completo de página _______
+Widget wiPageHeader({
+  required IconData icon,
+  required String title,
+  required String subtitle,
+  Color? color,
+}) => Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    wiIconCircle(icon, color: color),
+    AppCSS.gapM,
+    Text(title, style: AppStyle.h2.copyWith(color: color ?? AppCSS.primary)),
+    AppCSS.gapS,
+    Text(subtitle, style: AppStyle.bd, textAlign: TextAlign.center),
+  ],
+);

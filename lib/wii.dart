@@ -4,7 +4,7 @@ class wii {
   static const String repo = 'wiregistroo';
   static const String desc = 'La mejor app para registrar y dividir gastos con amigos';
   static const int lanzamiento = 2026;
-  static const String autor = '@wilder.taype';
+  static const String by = '@wilder.taype';
   static const String link = 'https://wtaype.github.io/';
   static const String version = 'v9.1.1';
 }

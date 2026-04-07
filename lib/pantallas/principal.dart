@@ -33,7 +33,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AppCSS.verdeClaro,
+    backgroundColor: AppCSS.bgLight,
     body: PageView(
       controller: _pageController,
       onPageChanged: (index) => setState(() => _indiceActual = index),
@@ -45,18 +45,18 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         setState(() => _indiceActual = index);
         _pageController.animateToPage(
           index,
-          duration: AppCSS.animacionRapida,
+          duration: AppCSS.trans1,
           curve: Curves.easeInOut,
         );
       },
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
-      selectedItemColor: AppCSS.verdePrimario,
-      unselectedItemColor: AppCSS.gris,
-      selectedLabelStyle: AppEstilos.icoSM.copyWith(
+      selectedItemColor: AppCSS.primary,
+      unselectedItemColor: AppCSS.gray,
+      selectedLabelStyle: AppStyle.lbl.copyWith(
         fontWeight: FontWeight.w500,
       ),
-      unselectedLabelStyle: AppEstilos.txtSM,
+      unselectedLabelStyle: AppStyle.sm,
       elevation: 10,
       items: const [
         BottomNavigationBarItem(
