@@ -6,17 +6,17 @@ class wii {
   static const int lanzamiento = 2026;
   static const String by = '@wilder.taype';
   static const String link = 'https://wtaype.github.io/';
-  static const String version = 'v10.1.1';
+  static const String version = 'v11.1.1';
 }
 
-/** Actualizar main luego esto, pero si es mucho, solo esto. (1)
-git tag v10 -m "Version v10" ; git push origin v10
+/**  ACTUALIZACIÓN PRINCIPAL ONE DEV [MAIN] (1)
+git add . ; git commit -m "Actualizacion Principal v11.10.10" ; git push origin main
 
-//  ACTUALIZACIÓN PRINCIPAL ONE DEV [START] (2)
-git add . ; git commit -m "Actualizacion Principal v10.10.10" ; git push origin main
+//  Actualizar versiones de seguridad [TAG NUEVO] (2)
+git tag v11 -m "Version v11" ; git push origin v11
 
-// En caso de emergencia, para actualizar el Tag existente. (3)
-git tag -d v10 ; git tag v10 -m "Version v10 actualizada" ; git push origin v10 --force
+// Actualizar versiones de seguridad [TAG REMPLAZO] (2)
+git tag -d v11 ; git tag v11 -m "Version v11 actualizada" ; git push origin v11 --force
 
 flutter clean
 flutter pub get
@@ -28,5 +28,11 @@ Registrar ->  Donde se registrar los gastos durante el día, mes y todo
 Registros -> Donde se muestra en tabla los registro del wiregistro de forma completa   
 Arreglar   -> Donde podemos establecer hasta donde se registro y con 
 Ajustes -> como tenemos actualmente.  
+
+Pantalla Inicio → Resumen semanal/mensual
+Pantalla Registrar → Formulario rápido + lista de gastos del día
+Pantalla Registros → Tabla/lista completa con filtros
+Pantalla Arreglar → Ajustes de grupo y divisiones
+Pantalla Ajustes → Ya la tienes perfecta
 
  ACTUALIZACION TAG[END] */

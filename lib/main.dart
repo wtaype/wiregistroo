@@ -5,12 +5,16 @@ import 'firebase_options.dart'; // 🔥 AGREGAR
 import 'inicio/cargando.dart';
 import 'wicss.dart';
 import 'wii.dart';
+import 'wicache.dart'; // 🧠 CACHE INTELIGENTE
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 🔥 INICIALIZAR FIREBASE ANTES DE TODO
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
+  // 🧠 INICIALIZAR CACHÉ INTELIGENTE
+  await WiCache.init();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

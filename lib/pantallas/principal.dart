@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../wicss.dart';
-import 'pantalla1/pantalla1.dart';
-import 'pantalla2/pantalla2.dart';
-import 'pantalla3/pantalla3.dart';
-import 'pantalla4/pantalla4.dart';
-import 'pantalla5/pantalla5.dart';
+import 'pantalla1/inicio.dart'; // Importar inicio.dart
+import 'pantalla2/registrar.dart'; // Importar registrar.dart
+import 'pantalla3/registros.dart'; // Importar registros.dart
+import 'pantalla4/arreglar.dart'; // Importar arreglar.dart
+import 'pantalla5/pantalla5.dart'; // Ajustes
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
@@ -14,15 +14,15 @@ class PantallaPrincipal extends StatefulWidget {
 }
 
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
-  int _indiceActual = 0;
+  int _indiceActual = 0; // 🏠 Empezar en Inicio
   late PageController _pageController;
 
   final List<Widget> _pantallas = const [
-    PantallaRegistrar(),
-    PantallaGastos(),
-    PantallaMensajes(),
-    PantallaArreglar(),
-    PantallaConfiguracion(),
+    PantallaInicio(), // Pantalla 1 - Inicio
+    PantallaRegistrar(), // Pantalla 2 - Registrar (NUEVA)
+    PantallaRegistros(), // Pantalla 3 - Registros
+    PantallaArreglar(), // Pantalla 4 - Arreglar
+    PantallaConfiguracion(), // Pantalla 5 - Ajustes
   ];
 
   @override
@@ -75,8 +75,8 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           label: 'Registros',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.verified_outlined),
-          activeIcon: Icon(Icons.verified),
+          icon: Icon(Icons.build_outlined),
+          activeIcon: Icon(Icons.build),
           label: 'Arreglar',
         ),
         BottomNavigationBarItem(
