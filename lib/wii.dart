@@ -3,17 +3,17 @@ class wii {
   static const int lanzamiento = 2026;
   static const String autor = '@wilder.taype';
   static const String link = 'https://wtaype.github.io/';
-  static const String version = 'v11.1.1';
+  static const String version = 'v9.1.1';
 }
 
 /** Actualizar main luego esto, pero si es mucho, solo esto. (1)
-git tag v11 -m "Version v11" ; git push origin v11
+git tag v9 -m "Version v9" ; git push origin v9
 
 //  ACTUALIZACIÓN PRINCIPAL ONE DEV [START] (2)
-git add . ; git commit -m "Actualizacion Principal v11.10.10" ; git push origin main
+git add . ; git commit -m "Actualizacion Principal v9.10.10" ; git push origin main
 
 // En caso de emergencia, para actualizar el Tag existente. (3)
-git tag -d v11 ; git tag v11 -m "Version v11 actualizada" ; git push origin v11 --force
+git tag -d v9 ; git tag v9 -m "Version v9 actualizada" ; git push origin v9 --force
 
 flutter clean
 flutter pub get
