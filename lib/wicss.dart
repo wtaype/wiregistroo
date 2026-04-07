@@ -1,195 +1,188 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// 🎨 ===== COLORES =====
+// 🎨 COLORES Y DISEÑO - TEMA VERDE v2 _______
 class AppCSS {
-  static const String descripcion =
-      'La mejor app para registrar y dividir gastos con amigos';
-  static const String creadoBy = 'Con mucho amor ❤️';
-
-  // Assets
-  static const String _logoPath = 'assets/images/logo.png';
+  // 🖼️ ASSETS _______
+  static const String lgPath = 'assets/images/logo.png';
   static const String logoSmile = 'assets/images/smile.png';
-
-  static Widget get miLogo => Image.asset(
-    _logoPath,
-    width: 80,
-    height: 80,
-    fit: BoxFit.cover,
-    errorBuilder: (_, __, ___) =>
-        const Icon(Icons.account_circle, size: 80, color: AppCSS.verdePrimario),
+  
+  static Widget get logo => Image.asset(
+    lgPath, width: 80, height: 80, fit: BoxFit.cover,
+    errorBuilder: (_, __, ___) => const Icon(Icons.account_circle, size: 80, color: primary),
   );
 
-  static Widget get miLogoCircular => Container(
-    width: 80,
-    height: 80,
+  static Widget get logoCircular => Container(
+    width: 80, height: 80,
     decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: AppCSS.verdePrimario.withOpacity(0.3),
-          blurRadius: 8,
-          offset: const Offset(0, 3),
-        ),
-      ],
+      shape: BoxShape.circle, color: white,
+      boxShadow: [BoxShadow(color: primary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 3))],
     ),
-    child: ClipOval(child: miLogo),
+    child: ClipOval(child: logo),
   );
 
-  // Verdes principales
-  static const Color verdePrimario = Color(0xFF4CAF50);
-  static const Color verdeSecundario = Color(0xFF81C784);
-  static const Color verdeClaro = Color(0xFFB9F6CA);
-  static const Color verdeSuave = Color(0xFFE8F5E8);
-  static const Color verdeOscuro = Color(0xFF388E3C);
+  // 🎨 PRINCIPALES _______
+  static const Color primary = Color(0xFF4CAF50);   // Verde principal
+  static const Color secondary = Color(0xFF81C784); // Verde secundario
+  static const Color bgLight = Color(0xFFB9F6CA);   // Fondo claro
+  static const Color bgSoft = Color(0xFFE8F5E8);    // Fondo suave
+  static const Color bgDark = Color(0xFF388E3C);    // Verde oscuro
+  static const Color white = Colors.white;          // Blanco
+  static const Color black = Color(0xFF000000);     // Negro
+  static const Color gray = Color(0xFF9E9E9E);      // Gris
+  static const Color grayLight = Color(0xFFF5F5F5); // Gris claro
+  static const Color grayDark = Color(0xFF424242);  // Gris oscuro
+  static const Color border = Color(0xFFB9F6CA);    // Borde
+  static const Color inputBg = Color(0xFFF5FFF6);   // Input fondo
+  static const Color clear = Colors.transparent;    // Transparente
 
-  // Textos
-  static const Color textoOscuro = Color(0xFF2E2E2E);
-  static const Color textoVerde = Color(0xFF388E3C);
-  static const Color blanco = Colors.white;
-  static const Color enlace = Color(0xFF4CAF50);
+  // 📝 TEXTOS _______
+  static const Color text = Color(0xFF000000);     // Texto base
+  static const Color text700 = Color(0xFF1A1A1A);  // Texto oscuro
+  static const Color text500 = Color(0xFF2E2E2E);  // Texto medio
+  static const Color text300 = Color(0xFF666666);  // Texto claro
+  static const Color textGreen = Color(0xFF388E3C); // Texto verde
 
-  // Estados
-  static const Color error = Color(0xFFE53935);
-  static const Color exito = Color(0xFF4CAF50);
-  static const Color advertencia = Color(0xFFFF9800);
-  static const Color info = Color(0xFF2196F3);
+  // ✅ ESTADOS _______
+  static const Color success = Color(0xFF4CAF50); // Éxito
+  static const Color error = Color(0xFFE53935);   // Error
+  static const Color warning = Color(0xFFFF9800); // Alerta
+  static const Color info = Color(0xFF2196F3);    // Info
 
-  // Grises
-  static const Color gris = Color(0xFF9E9E9E);
-  static const Color grisClaro = Color(0xFFF5F5F5);
-  static const Color grisOscuro = Color(0xFF424242);
+  // 🧩 CATEGORÍAS (gastos) bg1-bg6 _______
+  static const Color bg1 = Color(0xFF4CAF50); // Comida
+  static const Color bg2 = Color(0xFF2196F3); // Transporte
+  static const Color bg3 = Color(0xFF9C27B0); // Entretenimiento
+  static const Color bg4 = Color(0xFFFF5722); // Salud
+  static const Color bg5 = Color(0xFFFFB300); // Compras
+  static const Color bg6 = Color(0xFF00BCD4); // Otros
 
-  // Extras
-  static const Color transparente = Colors.transparent;
-  static const Color sombra = Color(0x1A000000);
-
-  // 📐 ===== ESPACIADOS =====
-  static const double espacioChico = 8.0;
-  static const double espacioMedio = 16.0;
-  static const double espacioGrande = 24.0;
-  static const double espacioGigante = 32.0;
-
-  // 📐 ===== RADIOS =====
-  static const double radioChico = 8.0;
-  static const double radioMedio = 12.0;
-  static const double radioGrande = 16.0;
-
-  // ⏱️ ===== DURACIONES =====
-  static const Duration animacionRapida = Duration(milliseconds: 300);
-  static const Duration animacionLenta = Duration(milliseconds: 600);
-  static const Duration tiempoCarga = Duration(seconds: 3);
-
-  // 📱 ===== PADDINGS =====
-  static const EdgeInsets miwp = EdgeInsets.symmetric(
-    vertical: 9.0,
-    horizontal: 10.0,
+  // 🌈 GRADIENTES _______
+  static const LinearGradient gradGreen = LinearGradient(
+    colors: [Color(0xFF4CAF50), Color(0xFF81C784)],
+    begin: Alignment.topLeft, end: Alignment.bottomRight,
   );
-  static const EdgeInsets miwpL = EdgeInsets.symmetric(
-    vertical: 15.0,
-    horizontal: 20.0,
+  static const LinearGradient gradSoft = LinearGradient(
+    colors: [Color(0xFFB9F6CA), Color(0xFF4CAF50)],
+    begin: Alignment.topLeft, end: Alignment.bottomRight,
   );
-  static const EdgeInsets miwpM = EdgeInsets.only(
-    top: 10.0,
-    bottom: 15.0,
-    right: 10.0,
-    left: 10.0,
-  );
-  static const EdgeInsets miwpS = EdgeInsets.all(espacioChico);
-  static const EdgeInsets miwpXL = EdgeInsets.all(espacioGigante);
 
-  // 🎨 ===== ESPACIADORES =====
-  static Widget get espacioChicoWidget => const SizedBox(height: espacioChico);
-  static Widget get espacioMedioWidget => const SizedBox(height: espacioMedio);
-  static Widget get espacioGrandeWidget =>
-      const SizedBox(height: espacioGrande);
+  // 📐 ESPACIADOS _______
+  static const double sp8 = 8.0;
+  static const double sp16 = 16.0;
+  static const double sp24 = 24.0;
+
+  // 📐 RADIOS _______
+  static const double rad8 = 8.0;
+  static const double rad12 = 12.0;
+  static const double rad16 = 16.0;
+  static const double rad20 = 20.0;
+
+  // ⏱️ TRANSICIONES trans1-trans3 _______
+  static const Duration trans1 = Duration(milliseconds: 300); // Rápida
+  static const Duration trans2 = Duration(milliseconds: 600); // Lenta
+  static const Duration trans3 = Duration(seconds: 3);        // Carga
+
+  // 📱 PADDINGS _______
+  static const EdgeInsets padM = EdgeInsets.symmetric(vertical: 9, horizontal: 10);
+  static const EdgeInsets padL = EdgeInsets.symmetric(vertical: 15, horizontal: 20);
+
+  // 📏 GAPS _______
+  static Widget get gapS => const SizedBox(height: sp8);
+  static Widget get gapM => const SizedBox(height: sp16);
+  static Widget get gapL => const SizedBox(height: sp24);
+  static Widget get gapHS => const SizedBox(width: sp8);
+  static Widget get gapHM => const SizedBox(width: sp16);
+
+  // 🪟 GLASS glass300-glass700 (300=ligero, 700=intenso) _______
+  static BoxDecoration get glass300 => BoxDecoration(
+    gradient: LinearGradient(
+      colors: [bgSoft.withOpacity(0.6), white.withOpacity(0.3)],
+      begin: Alignment.topLeft, end: Alignment.bottomRight,
+    ),
+    borderRadius: BorderRadius.circular(rad20),
+    border: Border.all(color: white.withOpacity(0.4), width: 1.5),
+    boxShadow: [BoxShadow(color: primary.withOpacity(0.1), blurRadius: 20, spreadRadius: 5, offset: const Offset(0, 10))],
+  );
+  
+  static BoxDecoration get glass500 => BoxDecoration(
+    color: white.withOpacity(0.7),
+    borderRadius: BorderRadius.circular(rad16),
+    border: Border.all(color: border.withOpacity(0.5)),
+    boxShadow: [BoxShadow(color: primary.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 4))],
+  );
+  
+  static BoxDecoration get glass700 => BoxDecoration(
+    color: white.withOpacity(0.85),
+    borderRadius: BorderRadius.circular(rad20),
+    border: Border.all(color: border.withOpacity(0.7), width: 1.5),
+    boxShadow: [BoxShadow(color: black.withOpacity(0.08), blurRadius: 24, spreadRadius: 2, offset: const Offset(0, 8))],
+  );
+
+  // 🌫️ SOMBRAS shadow _______
+  static List<BoxShadow> get shadow => [
+    BoxShadow(color: primary.withOpacity(0.1), blurRadius: 15, offset: const Offset(0, 5)),
+  ];
+
+  // 🔲 BORDES borderBox _______
+  static BoxDecoration get borderBox => BoxDecoration(
+    color: inputBg, borderRadius: BorderRadius.circular(rad12),
+    border: Border.all(color: border),
+  );
 }
 
-// 🎭 ===== ESTILOS DE TEXTO =====
-class AppEstilos {
-  static ThemeData get temaApp => ThemeData(
-    scaffoldBackgroundColor: AppCSS.verdeClaro,
+// 🎭 ESTILOS DE TEXTO v2 _______
+class AppStyle {
+  // 🎨 TEMA APP _______
+  static ThemeData get tema => ThemeData(
+    scaffoldBackgroundColor: AppCSS.bgLight,
     primarySwatch: Colors.green,
     fontFamily: GoogleFonts.poppins().fontFamily,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppCSS.verdePrimario,
-      foregroundColor: AppCSS.blanco,
-      elevation: 4.0,
-      toolbarHeight: 45.0,
-      titleTextStyle: textoBoton,
-      centerTitle: true,
-      iconTheme: const IconThemeData(color: AppCSS.blanco, size: 22.0),
-      shadowColor: AppCSS.verdePrimario.withOpacity(0.3),
+      backgroundColor: AppCSS.primary, foregroundColor: AppCSS.white,
+      elevation: 0, toolbarHeight: 45,
+      titleTextStyle: btn, centerTitle: true,
+      iconTheme: const IconThemeData(color: AppCSS.white, size: 22),
+      shadowColor: AppCSS.primary.withOpacity(0.3),
     ),
     textTheme: TextTheme(
-      headlineLarge: tituloGrande,
-      headlineMedium: tituloMedio,
-      titleLarge: subtitulo,
-      bodyLarge: textoNormal,
-      bodyMedium: textoChico,
+      headlineLarge: h1,
+      headlineMedium: h2,
+      titleLarge: h3,
+      bodyLarge: bd,
+      bodyMedium: bdS,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppCSS.verdePrimario,
-        foregroundColor: AppCSS.blanco,
-        textStyle: textoBoton,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        backgroundColor: AppCSS.primary, foregroundColor: AppCSS.white,
+        textStyle: btn,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppCSS.rad12)),
       ),
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white, selectedItemColor: AppCSS.primary,
+      unselectedItemColor: AppCSS.gray, elevation: 10,
+      type: BottomNavigationBarType.fixed,
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 
-  static TextStyle get tituloGrande => GoogleFonts.poppins(
-    fontSize: 32,
-    fontWeight: FontWeight.w600,
-    color: AppCSS.textoVerde,
-  );
+  // 📝 TEXTOS _______
+  static TextStyle get h1 => _p(32, FontWeight.w600, AppCSS.textGreen);
+  static TextStyle get h2 => _p(24, FontWeight.w600, AppCSS.textGreen);
+  static TextStyle get h3 => _p(18, FontWeight.w600, AppCSS.text700);
+  static TextStyle get bd => _p(16, FontWeight.w500, AppCSS.text500);
+  static TextStyle get bdS => _p(14, FontWeight.w500, AppCSS.text500);
+  static TextStyle get lbl => _p(13, FontWeight.w500, AppCSS.text300);
+  static TextStyle get sm => _p(11, FontWeight.w500, AppCSS.text300);
+  static TextStyle get btn => _p(16, FontWeight.w600, AppCSS.white);
 
-  static TextStyle get tituloMedio => GoogleFonts.poppins(
-    fontSize: 24,
-    fontWeight: FontWeight.w600,
-    color: AppCSS.textoVerde,
-  );
-
-  static TextStyle get subtitulo => GoogleFonts.poppins(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    color: AppCSS.textoOscuro,
-  );
-
-  static TextStyle get textoNormal => GoogleFonts.poppins(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    color: AppCSS.textoOscuro,
-  );
-
-  static TextStyle get textoChico => GoogleFonts.poppins(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    color: AppCSS.textoOscuro,
-  );
-
-  static TextStyle get icoSM => GoogleFonts.poppins(
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-    color: AppCSS.textoOscuro,
-  );
-
-  static TextStyle get txtSM => GoogleFonts.poppins(
-    fontSize: 11,
-    fontWeight: FontWeight.w500,
-    color: AppCSS.textoOscuro,
-  );
-
-  static TextStyle get textoBoton => GoogleFonts.poppins(
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: AppCSS.blanco,
-  );
+  // 🔧 HELPER _______
+  static TextStyle _p(double sz, FontWeight w, Color c) =>
+      GoogleFonts.poppins(fontSize: sz, fontWeight: w, color: c);
 }
 
-// 🎨 ===== COLORES DE VALIDACIÓN =====
+// 🎨 VALIDACIÓN _______
 class VdError {
   static const Color borde = Color(0xFFE53935);
   static const Color texto = Color(0xFFD32F2F);

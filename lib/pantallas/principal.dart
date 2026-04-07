@@ -60,6 +60,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       elevation: 10,
       items: const [
         BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: 'Inicio',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.add_circle_outline),
           activeIcon: Icon(Icons.add_circle),
           label: 'Registrar',
@@ -67,12 +72,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         BottomNavigationBarItem(
           icon: Icon(Icons.receipt_long_outlined),
           activeIcon: Icon(Icons.receipt_long),
-          label: 'Gastos',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline),
-          activeIcon: Icon(Icons.chat_bubble),
-          label: 'Mensajes',
+          label: 'Registros',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.verified_outlined),
@@ -82,7 +82,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         BottomNavigationBarItem(
           icon: Icon(Icons.settings_outlined),
           activeIcon: Icon(Icons.settings),
-          label: 'Configuración',
+          label: 'Ajustes',
         ),
       ],
     ),

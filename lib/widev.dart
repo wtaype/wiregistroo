@@ -1,245 +1,316 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'wicss.dart';
 
-// ═══════════════════════════════════════════════════════════════════
-// 🎯 WIDGETS REUTILIZABLES - Sistema de componentes
-// ═══════════════════════════════════════════════════════════════════
+// 🎯 WIDGETS Y HELPERS REUTILIZABLES v10 _______
+// 👋 Saludo v10 _______
+String Saludar() {
+  final h = DateTime.now().hour;
+  if (h < 12) return 'Buenos días ☀️';
+  if (h < 18) return 'Buenas tardes 🌤️';
+  return 'Buenas noches 🌙';
+}
 
-// 🎯 Botón principal que usamos mucho
-class BotonPrincipal extends StatelessWidget {
-  final String texto;
-  final VoidCallback alPresionar;
-  final IconData? icono;
-  final bool estaCargando;
-  final Color? colorFondo;
+// 📅 Fecha v10 — centraliza _fmtFecha x5 archivos _______
+String wiFecha(String f, {bool anio = false}) {
+  try {
+    final d = DateTime.parse(f);
+    const m = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return anio ? '${d.day} ${m[d.month - 1]} ${d.year}' : '${d.day} ${m[d.month - 1]}';
+  } catch (_) { return f; }
+}
 
-  const BotonPrincipal({
-    super.key,
-    required this.texto,
-    required this.alPresionar,
-    this.icono,
-    this.estaCargando = false,
-    this.colorFondo,
-  });
+// 📆 Dia v10 — "Lunes, 2 Mar" _______
+String wiDia() {
+  const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  final n = DateTime.now();
+  return '${dias[n.weekday % 7]}, ${n.day} ${meses[n.month - 1]}';
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: estaCargando ? null : alPresionar,
-      icon: estaCargando
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
-          : Icon(icono ?? Icons.check),
-      label: Text(texto),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: colorFondo ?? AppCSS.verdePrimario,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppCSS.espacioGrande,
-          vertical: AppCSS.espacioMedio,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppCSS.radioMedio),
-        ),
-      ),
-    );
+// ⏳ Dias restantes v10 — centraliza _diasRest x2 archivos _______
+Widget diasRestantes(String f) {
+  try {
+    final hoy = DateTime.now();
+    final hoyStr = '${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-${hoy.day.toString().padLeft(2, '0')}';
+    final diff = DateTime.parse(f).difference(DateTime.parse(hoyStr)).inDays;
+    if (diff < 0) return Text('${-diff}d atrás', style: AppStyle.sm.copyWith(color: AppCSS.error, fontWeight: FontWeight.w600));
+    if (diff == 0) return Text('Hoy', style: AppStyle.sm.copyWith(color: AppCSS.primary, fontWeight: FontWeight.w600));
+    return Text('${diff}d', style: AppStyle.sm.copyWith(color: AppCSS.success, fontWeight: FontWeight.w600));
+  } catch (_) { return const SizedBox.shrink(); }
+}
+
+// 🎨 Color hex v10 — centraliza parser x5 archivos _______
+Color wicoHx(String? hex, Color fallback) {
+  if (hex == null || hex.isEmpty) return fallback;
+  try { return Color(int.parse('0xFF${hex.replaceAll('#', '')}')); }
+  catch (_) { return fallback; }
+}
+
+// 🌈 Gradient texto v10 _______
+Widget gdTexto(String tx, {double sz = 24}) => ShaderMask(
+  shaderCallback: (b) => AppCSS.gradGreen.createShader(b),
+  child: Text(tx, style: GoogleFonts.poppins(fontSize: sz, fontWeight: FontWeight.w700, color: Colors.white)),
+);
+
+// 🔔 Notificacion v10 — 4 tipos como widev.js _______
+class Notificacion {
+  static void ok(BuildContext c, String m) => _show(c, m, AppCSS.success, Icons.check_circle);
+  static void err(BuildContext c, String m) => _show(c, m, AppCSS.error, Icons.error);
+  static void wrn(BuildContext c, String m) => _show(c, m, AppCSS.warning, Icons.warning_amber);
+  static void info(BuildContext c, String m) => _show(c, m, AppCSS.info, Icons.info);
+
+  static void _show(BuildContext c, String m, Color clr, IconData ico) {
+    ScaffoldMessenger.of(c).showSnackBar(SnackBar(
+      content: Row(children: [
+        Icon(ico, color: AppCSS.white), AppCSS.gapHS,
+        Expanded(child: Text(m, style: AppStyle.bdS.copyWith(color: AppCSS.white))),
+      ]),
+      backgroundColor: clr,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppCSS.rad8)),
+      duration: AppCSS.trans1,
+    ));
   }
 }
 
-// 📝 Campo de texto guapo en español
-class CampoTexto extends StatelessWidget {
-  final String etiqueta;
-  final String? pista;
-  final IconData? icono;
-  final bool esContrasena;
-  final TextEditingController? controlador;
-  final String? Function(String?)? validador;
-  final TextInputType tipoTeclado;
-
-  const CampoTexto({
-    super.key,
-    required this.etiqueta,
-    this.pista,
-    this.icono,
-    this.esContrasena = false,
-    this.controlador,
-    this.validador,
-    this.tipoTeclado = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controlador,
-      obscureText: esContrasena,
-      validator: validador,
-      keyboardType: tipoTeclado,
-      style: AppEstilos.textoNormal,
-      decoration: InputDecoration(
-        labelText: etiqueta,
-        hintText: pista,
-        prefixIcon: icono != null
-            ? Icon(icono, color: AppCSS.verdePrimario)
-            : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppCSS.radioMedio),
-          borderSide: BorderSide(color: AppCSS.verdeSecundario),
+// 🗑️ Mensaje v10 — centraliza _confirmarEliminar x5 archivos _______
+Future<bool?> Mensaje(BuildContext ctx, {String titulo = 'Eliminar', required String msg}) =>
+  showDialog<bool>(
+    context: ctx,
+    builder: (c) => AlertDialog(
+      title: Text(titulo, style: AppStyle.h3),
+      content: Text(msg, style: AppStyle.bd),
+      backgroundColor: AppCSS.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppCSS.rad12)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(c, false),
+          child: Text('Cancelar', style: AppStyle.bdS.copyWith(color: AppCSS.gray)),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppCSS.radioMedio),
-          borderSide: BorderSide(color: AppCSS.verdePrimario, width: 2),
-        ),
-        filled: true,
-        fillColor: AppCSS.blanco,
-      ),
-    );
-  }
-}
-
-// 💳 Tarjeta bonita para mostrar información
-class TarjetaInformacion extends StatelessWidget {
-  final Widget contenido;
-  final VoidCallback? alTocar;
-  final Color? colorFondo;
-  final double? elevacion;
-
-  const TarjetaInformacion({
-    super.key,
-    required this.contenido,
-    this.alTocar,
-    this.colorFondo,
-    this.elevacion = 4,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: elevacion,
-      color: colorFondo,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppCSS.radioMedio),
-      ),
-      child: InkWell(
-        onTap: alTocar,
-        borderRadius: BorderRadius.circular(AppCSS.radioMedio),
-        child: Padding(
-          padding: const EdgeInsets.all(AppCSS.espacioMedio),
-          child: contenido,
-        ),
-      ),
-    );
-  }
-}
-
-// 😢 Widget para cuando no hay datos disponibles
-class SinDatos extends StatelessWidget {
-  final String mensaje;
-  final IconData icono;
-  final String? textoBoton;
-  final VoidCallback? accionBoton;
-
-  const SinDatos({
-    super.key,
-    required this.mensaje,
-    this.icono = Icons.inbox,
-    this.textoBoton,
-    this.accionBoton,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icono, size: 80, color: AppCSS.verdeSecundario),
-          const SizedBox(height: AppCSS.espacioMedio),
-          Text(
-            mensaje,
-            style: AppEstilos.subtitulo,
-            textAlign: TextAlign.center,
+        ElevatedButton(
+          onPressed: () => Navigator.pop(c, true),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppCSS.error,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppCSS.rad8)),
           ),
-          if (textoBoton != null && accionBoton != null) ...[
-            const SizedBox(height: AppCSS.espacioGrande),
-            BotonPrincipal(
-              texto: textoBoton!,
-              alPresionar: accionBoton!,
-              icono: Icons.refresh,
+          child: Text('Eliminar', style: AppStyle.bdS.copyWith(color: AppCSS.white)),
+        ),
+      ],
+    ),
+  );
+
+// 🏷️ wiBox v10 — centraliza _tag/_badge x4 archivos _______
+Widget wiBox(IconData ico, String lbl, Color clr) => Container(
+  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+  decoration: BoxDecoration(color: clr.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+  child: Row(mainAxisSize: MainAxisSize.min, children: [
+    Icon(ico, size: 10, color: clr),
+    const SizedBox(width: 3),
+    Text(lbl, style: AppStyle.sm.copyWith(color: clr)),
+  ]),
+);
+
+// 🔘 wiBoxs v10 — centraliza _tagDot x2 archivos _______
+Widget wiBoxs(String lbl, Color clr) => Row(mainAxisSize: MainAxisSize.min, children: [
+  Container(width: 8, height: 8, decoration: BoxDecoration(color: clr, shape: BoxShape.circle)),
+  const SizedBox(width: 3),
+  Text(lbl, style: AppStyle.sm),
+]);
+
+// 🔘 wiFiltro v10 — centraliza _filtroChip x3 archivos _______
+Widget wiFiltro({
+  required String keyF, required String lbl, required IconData ico,
+  required Color clr, required String sel, required VoidCallback onTap, int? count,
+}) {
+  final activo = sel == keyF;
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: activo ? clr.withOpacity(0.15) : AppCSS.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(AppCSS.rad8),
+        border: Border.all(color: activo ? clr : AppCSS.border.withOpacity(0.5)),
+      ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(ico, size: 14, color: activo ? clr : AppCSS.gray),
+        const SizedBox(width: 4),
+        Text(lbl, style: AppStyle.sm.copyWith(
+          color: activo ? clr : AppCSS.text500,
+          fontWeight: activo ? FontWeight.w600 : FontWeight.w500,
+        )),
+        if (count != null && count > 0) ...[
+          const SizedBox(width: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+              color: activo ? clr : AppCSS.gray.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(10),
             ),
-          ],
+            child: Text('$count', style: AppStyle.sm.copyWith(
+              color: activo ? AppCSS.white : AppCSS.text300, fontSize: 10,
+            )),
+          ),
         ],
-      ),
-    );
-  }
+      ]),
+    ),
+  );
 }
 
-// 🍕 Helper para mostrar mensajes sabrosos
-class MensajeHelper {
-  static void mostrarExito(BuildContext contexto, String mensaje) {
-    _mostrarMensaje(contexto, mensaje, esError: false);
-  }
+// 📊 wiStat v10 — centraliza _statChip x3 archivos _______
+Widget wiStat(String val, String lbl, IconData ico, Color clr, {bool vertical = true}) => Expanded(
+  child: Container(
+    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+    decoration: AppCSS.glass500,
+    child: vertical
+      ? Column(children: [
+          Icon(ico, size: 18, color: clr),
+          const SizedBox(height: 2),
+          Text(val, style: AppStyle.bdS.copyWith(color: clr, fontWeight: FontWeight.w700)),
+          Text(lbl, style: AppStyle.sm),
+        ])
+      : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(ico, size: 16, color: clr),
+          const SizedBox(width: 6),
+          Text(val, style: AppStyle.bdS.copyWith(color: clr, fontWeight: FontWeight.w700)),
+          const SizedBox(width: 4),
+          Text(lbl, style: AppStyle.sm),
+        ]),
+  ),
+);
 
-  static void mostrarError(BuildContext contexto, String mensaje) {
-    _mostrarMensaje(contexto, mensaje, esError: true);
-  }
+// 📈 wiProgress v10 — centraliza LinearProgressIndicator x4 archivos _______
+Widget wiProgress(double value, Color clr, {double h = 6}) => ClipRRect(
+  borderRadius: BorderRadius.circular(h / 2),
+  child: LinearProgressIndicator(
+    value: value.clamp(0.0, 1.0), minHeight: h,
+    backgroundColor: AppCSS.border.withOpacity(0.3),
+    valueColor: AlwaysStoppedAnimation<Color>(clr),
+  ),
+);
 
-  static void _mostrarMensaje(
-    BuildContext contexto,
-    String mensaje, {
-    required bool esError,
-  }) {
-    ScaffoldMessenger.of(contexto).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              esError ? Icons.error : Icons.check_circle,
-              color: Colors.white,
-            ),
-            const SizedBox(width: AppCSS.espacioChico),
-            Expanded(
-              child: Text(
-                mensaje,
-                style: AppEstilos.textoNormal.copyWith(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: esError ? Colors.red.shade600 : AppCSS.verdePrimario,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppCSS.radioChico),
-        ),
-        duration: AppCSS.animacionLenta,
-      ),
-    );
-  }
-}
-
-// 🔄 Widget de carga bonito
-class IndicadorCarga extends StatelessWidget {
-  final String? mensaje;
-
-  const IndicadorCarga({super.key, this.mensaje});
+// 💳 Glass v10 — tarjeta glass _______
+class Glass extends StatelessWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+  final EdgeInsets? pad;
+  const Glass({super.key, required this.child, this.onTap, this.pad});
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(color: AppCSS.verdePrimario),
-          if (mensaje != null) ...[
-            const SizedBox(height: AppCSS.espacioMedio),
-            Text(mensaje!, style: AppEstilos.textoNormal),
-          ],
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext ctx) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: pad ?? const EdgeInsets.all(AppCSS.sp16),
+      decoration: AppCSS.glass500,
+      child: child,
+    ),
+  );
+}
+
+// 📊 Stat v10 — card de estadística _______
+class Stat extends StatelessWidget {
+  final String val;
+  final String lbl;
+  final IconData ico;
+  final Color color;
+  const Stat({super.key, required this.val, required this.lbl, required this.ico, this.color = AppCSS.primary});
+
+  @override
+  Widget build(BuildContext ctx) => Container(
+    padding: const EdgeInsets.all(AppCSS.sp16),
+    decoration: AppCSS.glass500,
+    child: Column(mainAxisSize: MainAxisSize.min, children: [
+      Icon(ico, color: color, size: 28),
+      const SizedBox(height: 6),
+      Text(val, style: AppStyle.h3.copyWith(color: color)),
+      Text(lbl, style: AppStyle.sm),
+    ]),
+  );
+}
+
+// 😢 Vacio v10 — sin datos _______
+class Vacio extends StatelessWidget {
+  final String msg;
+  final IconData ico;
+  final String? txtBtn;
+  final VoidCallback? onTap;
+  const Vacio({super.key, required this.msg, this.ico = Icons.inbox, this.txtBtn, this.onTap});
+
+  @override
+  Widget build(BuildContext ctx) => Center(
+    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(ico, size: 80, color: AppCSS.border),
+      AppCSS.gapM,
+      Text(msg, style: AppStyle.h3, textAlign: TextAlign.center),
+      if (txtBtn != null && onTap != null) ...[
+        AppCSS.gapL,
+        Btn(txt: txtBtn!, onTap: onTap!, ico: Icons.refresh),
+      ],
+    ]),
+  );
+}
+
+// 🔄 Load v10 — cargando _______
+class Load extends StatelessWidget {
+  final String? msg;
+  const Load({super.key, this.msg});
+
+  @override
+  Widget build(BuildContext ctx) => Center(
+    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const CircularProgressIndicator(color: AppCSS.primary),
+      if (msg != null) ...[AppCSS.gapM, Text(msg!, style: AppStyle.bd)],
+    ]),
+  );
+}
+
+// 🎯 Btn v10 — botón principal _______
+class Btn extends StatelessWidget {
+  final String txt;
+  final VoidCallback onTap;
+  final IconData? ico;
+  final bool load;
+  final Color? color;
+  const Btn({super.key, required this.txt, required this.onTap, this.ico, this.load = false, this.color});
+
+  @override
+  Widget build(BuildContext ctx) => ElevatedButton.icon(
+    onPressed: load ? null : onTap,
+    icon: load
+        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+        : Icon(ico ?? Icons.check),
+    label: Text(txt),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: color ?? AppCSS.primary,
+      padding: const EdgeInsets.symmetric(horizontal: AppCSS.sp24, vertical: AppCSS.sp16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppCSS.rad12)),
+    ),
+  );
+}
+
+// 📝 Campo v10 — input de texto _______
+class Campo extends StatelessWidget {
+  final String lbl;
+  final String? hint;
+  final IconData? ico;
+  final bool pass;
+  final TextEditingController? ctrl;
+  final String? Function(String?)? vld;
+  final TextInputType kb;
+  const Campo({super.key, required this.lbl, this.hint, this.ico, this.pass = false, this.ctrl, this.vld, this.kb = TextInputType.text});
+
+  @override
+  Widget build(BuildContext ctx) => TextFormField(
+    controller: ctrl, obscureText: pass, validator: vld, keyboardType: kb,
+    style: AppStyle.bd,
+    decoration: InputDecoration(
+      labelText: lbl, hintText: hint,
+      prefixIcon: ico != null ? Icon(ico, color: AppCSS.primary) : null,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppCSS.rad12), borderSide: BorderSide(color: AppCSS.border)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppCSS.rad12), borderSide: const BorderSide(color: AppCSS.primary, width: 2)),
+      filled: true, fillColor: AppCSS.inputBg,
+    ),
+  );
 }
