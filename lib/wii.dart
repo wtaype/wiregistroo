@@ -15,4 +15,8 @@ git add . ; git commit -m "Actualizacion Principal v10.10.10" ; git push origin 
 // En caso de emergencia, para actualizar el Tag existente. (3)
 git tag -d v10 ; git tag v10 -m "Version v10 actualizada" ; git push origin v10 --force
 
+flutter clean
+flutter pub get
+flutter run
+
  ACTUALIZACION TAG[END] */
